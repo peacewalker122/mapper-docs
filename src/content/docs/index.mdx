@@ -1,0 +1,45 @@
+---
+title: Mapper
+description: Schema compiler and backend mapping runtime
+template: splash
+hero:
+  tagline: Author a model once in YAML. Map CSV/XLSX files into typed records through a streaming pipeline.
+  actions:
+    - text: Quickstart
+      link: /mapper-docs/guides/quickstart/
+      icon: right-arrow
+    - text: Live demo
+      link: https://peacewalker122.github.io/mapper-fe/
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## Platform
+
+<CardGrid>
+  <Card title="Schema compiler" icon="document">
+    YAML models become stable-identity Go code. Field IDs are generated once
+    and pinned in lock files — names are metadata, IDs are identity.
+  </Card>
+  <Card title="Backend SDK" icon="server">
+    Registry, CSV/XLSX adapters, execution plans, and a plain `net/http` API.
+    Your code owns persistence via `ImportProcessor`.
+  </Card>
+  <Card title="Frontend SDK" icon="puzzle">
+    API client, portable `MappingSpec` state, and a React mapping editor. The
+    graph is derived UI — the spec is the source of truth.
+  </Card>
+  <Card title="Uploads" icon="upload">
+    Multipart convenience plus TUS resumable uploads. Every protocol converges
+    on a completed `FileID`.
+  </Card>
+</CardGrid>
+
+## Repositories
+
+- [mapper](https://github.com/peacewalker122/mapper) — monorepo archive
+- [mapper-compiler](https://github.com/peacewalker122/mapper-compiler) — `mapper-gen`
+- [mapper-be](https://github.com/peacewalker122/mapper-be) — Go backend SDK
+- [mapper-fe](https://github.com/peacewalker122/mapper-fe) — TypeScript + React SDK
