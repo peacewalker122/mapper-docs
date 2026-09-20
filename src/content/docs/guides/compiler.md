@@ -21,40 +21,9 @@ that consumes generated schema descriptors.
 
 ## Installation
 
-Requires both binaries on `PATH`: `mapper-gen` (orchestrator) and
-`mapper-gen-go` (Go generator plugin). The host resolves plugins via the
-`mapper-gen-<name>` executable convention.
-
-**Option A — Prebuilt binaries (recommended):**
-
-1. Open `mapper-compiler` GitHub Releases and download the archive for your
-   platform (`mapper-compiler_<version>_<Os>_<Arch>.tar.gz`, `.zip` on
-   Windows). Releases cover Linux, macOS, and Windows on amd64 and arm64.
-2. Verify against the published `mapper-compiler_<version>_checksums.txt`
-   (SHA-256).
-3. Extract both binaries and put them on `PATH`:
-
-```bash
-tar -xzf mapper-compiler_v0.1.0_Linux_x86_64.tar.gz
-chmod +x mapper-gen mapper-gen-go
-sudo mv mapper-gen mapper-gen-go /usr/local/bin/
-mapper-gen validate mapper.yaml
-```
-
-Replace `v0.1.0` with the latest release tag.
-
-**Option B — Build from source (requires Go 1.26.1+):**
-
-```bash
-git clone https://github.com/peacewalker122/mapper-compiler.git
-cd mapper-compiler
-go build -o mapper-gen ./cmd/mapper-gen
-go build -o mapper-gen-go ./generator/go/cmd/mapper-gen-go
-# Move both binaries somewhere on PATH
-```
-
-Compiler releases are binary-only; there is no installable Go module for
-`mapper-gen` itself.
+See [Install the compiler](/mapper-docs/installation/compiler/) for the
+install script, release archives, and source build. Both `mapper-gen` and
+`mapper-gen-go` must be on `PATH`.
 
 ## ID model
 

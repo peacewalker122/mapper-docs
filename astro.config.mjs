@@ -12,6 +12,10 @@ export default defineConfig({
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/peacewalker122/mapper-docs" }],
       sidebar: [
         {
+          label: "Installation",
+          items: ["installation/compiler", "installation/backend", "installation/frontend"],
+        },
+        {
           label: "Getting started",
           items: ["guides/introduction", "guides/quickstart", "guides/design-principles"],
         },
