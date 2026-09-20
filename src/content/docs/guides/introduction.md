@@ -52,6 +52,8 @@ The mapping is explicit, deterministic, and controlled by the user.
 
 ## Why Mapper Exists
 
+![Visualization of the external-data mismatch Mapper solves](/mapper-docs/mapper-problem.png)
+
 Most applications eventually need to import data from outside their own system.
 
 That data may come from:
