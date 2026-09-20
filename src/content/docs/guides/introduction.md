@@ -54,54 +54,6 @@ The mapping is explicit, deterministic, and controlled by the user.
 
 ![Visualization of the external-data mismatch Mapper solves](/mapper-docs/mapper-problem.png)
 
-Most applications eventually need to import data from outside their own system.
-
-That data may come from:
-
-- customers,
-- vendors,
-- business divisions,
-- partners,
-- legacy systems,
-- spreadsheets maintained manually.
-
-The problem is that external data rarely follows the exact format your internal model expects.
-
-A backend may expect:
-
-```json
-{
-  "msisdn": "628123456789",
-  "status": "ACTIVE",
-  "last_tx": "2026-09-20T10:00:00Z"
-}
-```
-
-while the uploaded spreadsheet contains:
-
-|   | A        | B       | C                 |
-|---|----------|---------|-------------------|
-| 1 | Nomor HP | Kondisi | Tanggal Transaksi |
-| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
-
-or:
-
-|   | A     | B     | C                |
-|---|-------|-------|------------------|
-| 1 | Phone | State | Transaction Date |
-| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
-
-or even:
-
-|   | A        | B        | C        |
-|---|----------|----------|----------|
-| 1 | Column A | Column B | Column C |
-| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
-
-The meaning may be correct, but the structure is different.
-
-Without Mapper, teams usually solve this in one of several ways.
-
 ### Manual preprocessing
 
 Someone opens the spreadsheet and:
