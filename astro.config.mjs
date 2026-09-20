@@ -7,8 +7,9 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Mapper",
+      favicon: "/favicon.png",
       description: "Schema compiler and backend mapping runtime docs",
-      social: [{ icon: "github", label: "GitHub", href: "https://github.com/peacewalker122/mapper" }],
+      social: [{ icon: "github", label: "GitHub", href: "https://github.com/peacewalker122/mapper-docs" }],
       sidebar: [
         {
           label: "Getting started",
