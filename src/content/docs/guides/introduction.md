@@ -9,17 +9,24 @@ Business data rarely arrives in the shape your system was designed for.
 
 One client sends:
 
-```text
-PhoneNumber | Status | Date
-```
+|   | A           | B      | C    |
+|---|-------------|--------|------|
+| 1 | PhoneNumber | Status | Date |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
 
 Another sends:
 
-```text
-MSISDN | State | Last Transaction
-```
+|   | A      | B     | C                |
+|---|--------|-------|------------------|
+| 1 | MSISDN | State | Last Transaction |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
 
-Another sends an Excel workbook with the same information arranged differently.
+Another sends an Excel workbook with the same information arranged differently:
+
+|   | A      | B            | C                |
+|---|--------|--------------|------------------|
+| 1 | State  | Last Transaction | MSISDN       |
+| 2 | ACTIVE | 2026-09-20T10:00:00Z | 628123456789 |
 
 Your application, however, expects something stable:
 
@@ -70,21 +77,24 @@ A backend may expect:
 
 while the uploaded spreadsheet contains:
 
-```text
-Nomor HP | Kondisi | Tanggal Transaksi
-```
+|   | A        | B       | C                 |
+|---|----------|---------|-------------------|
+| 1 | Nomor HP | Kondisi | Tanggal Transaksi |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
 
 or:
 
-```text
-Phone | State | Transaction Date
-```
+|   | A     | B     | C                |
+|---|-------|-------|------------------|
+| 1 | Phone | State | Transaction Date |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
 
 or even:
 
-```text
-Column A | Column B | Column C
-```
+|   | A        | B        | C        |
+|---|----------|----------|----------|
+| 1 | Column A | Column B | Column C |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
 
 The meaning may be correct, but the structure is different.
 
@@ -261,19 +271,13 @@ This keeps the backend model and mapping interface synchronized.
 
 The user uploads a CSV or Excel file.
 
-Mapper analyzes its structure:
+Mapper analyzes its structure. `customers.xlsx`, sheet **Customers** comes back looking like the spreadsheet itself:
 
-```text
-customers.xlsx
-      ↓
-Mapper
-      ↓
-Sheet: Customers
-
-[0] PhoneNumber
-[1] Status
-[2] Date
-```
+|   | A           | B      | C    |
+|---|-------------|--------|------|
+| 1 | PhoneNumber | Status | Date |
+| 2 | 628123456789 | ACTIVE | 2026-09-20T10:00:00Z |
+| 3 | 628982700101 | ACTIVE | 2026-09-19T08:12:44Z |
 
 Mapper does not try to determine what those columns mean.
 
