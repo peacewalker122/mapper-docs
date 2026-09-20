@@ -12,7 +12,7 @@ export default defineConfig({
       sidebar: [
         {
           label: "Getting started",
-          items: ["guides/introduction", "guides/quickstart"],
+          items: ["guides/introduction", "guides/quickstart", "guides/design-principles"],
         },
         {
           label: "Compiler",
