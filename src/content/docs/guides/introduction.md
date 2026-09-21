@@ -252,8 +252,6 @@ After that point, the mapping system does not care whether the file arrived thro
 ```text
 multipart upload
 TUS
-S3 multipart
-GCS resumable upload
 custom upload protocol
 ```
 
@@ -328,19 +326,23 @@ The SDK provides an `ImportProcessor` abstraction.
 For example:
 
 ```go
-svc.RegisterImportProcessor(
-	generated.SubscriberSchema.ID,
+processor := mapper.ImportProcessorFunc(
+	func(
+		ctx context.Context,
+		info mapper.RowContext,
+		record mapper.Record,
+	) error {
 
-	mapper.ImportProcessorFunc(
-		func(
-			ctx context.Context,
-			info mapper.RowContext,
-			record mapper.Record,
-		) error {
+		return repository.Save(ctx, record)
+	},
+)
 
-			return repository.Save(ctx, record)
-		},
-	),
+svc := mapper.New(
+	mapper.WithFileStore(store),
+	mapper.WithSourceAdapter(csv.New()),
+	mapper.WithImporter(executor.New(
+		executor.WithImportProcessor(processor),
+	)),
 )
 ```
 

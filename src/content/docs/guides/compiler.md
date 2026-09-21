@@ -5,7 +5,7 @@ description: YAML models to stable-identity Go schemas
 
 `mapper-compiler` is a build-time tool. It reads a model, validates it,
 resolves stable numeric IDs through a lock file, then passes one resolved
-intermediate representation to the Go generator.
+intermediate representation to each configured generator plugin.
 
 ```text
 mapper.yaml
@@ -22,8 +22,8 @@ that consumes generated schema descriptors.
 ## Installation
 
 See [Install the compiler](/mapper-docs/installation/compiler/) for the
-install script, release archives, and source build. Both `mapper-gen` and
-`mapper-gen-go` must be on `PATH`.
+install script, release archives, and source build. `mapper-gen`,
+`mapper-gen-go`, and `mapper-gen-ts` must be on `PATH`.
 
 ## ID model
 
@@ -51,13 +51,21 @@ generators:
     out: ./internal/mapper
     options:
       package: mapping
+  - plugin: ts
+    out: ./src/generated
+    options:
+      importFrom: "@mapper-fe/client"
+      withSchema: true
 ```
 
-`mapper-gen` resolves the Go plugin through its registry and executable
-convention. Generator options are validated by the Go plugin.
+`mapper-gen` resolves each plugin through its registry and executable
+convention (`mapper-gen-go`, `mapper-gen-ts`). Generator options are
+validated by each plugin: `package` (Go) and `importFrom` / `withSchema`
+(TypeScript).
 
-Go is currently supported. Contributors are needed for additional language
-generators.
+Go and TypeScript are supported. The TypeScript plugin emits a typed
+interface (camelCase props, `datetime` as ISO `string`, optional fields as
+`?: T | null`) plus a `Schema` const compatible with `@mapper-fe/client`.
 
 ## Generator protocol
 
@@ -107,4 +115,5 @@ type CompileResult struct {
 }
 ```
 
-Go generation happens separately through `mapper-compiler/generator/go`.
+Generation happens separately through `mapper-compiler/generator/go` and
+`mapper-compiler/generator/ts`.

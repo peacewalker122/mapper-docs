@@ -32,7 +32,7 @@ The graph UI produces a small language-neutral specification.
 ```text
 Frontend
 → MappingSpec
-→ Go / PHP / Python / TypeScript backend SDK
+→ Go backend SDK (generated TypeScript models for the frontend)
 ```
 
 ## File transport is replaceable
@@ -40,7 +40,6 @@ Frontend
 ```text
 multipart
 TUS
-S3
 custom upload
 ```
 

@@ -67,7 +67,10 @@ Row error codes: `invalid_integer`, `invalid_decimal`, `invalid_boolean`,
 ```
 
 `200` success · `400` malformed/validation · `404` schema/file missing ·
-`405` wrong method · `413` over max · `415` wrong content-type ·
+`405` wrong method · `415` wrong content-type ·
 `500` internal · `503` store/adapter/importer unavailable.
+`413` (`upload_too_large`) is TUS-extension-only, returned when a declared
+`Upload-Length` or chunk exceeds the configured maximum — not by the three
+core endpoints above.
 Rejected rows never fail the HTTP request itself. Every operation honors
 `context.Context` cancellation end to end.

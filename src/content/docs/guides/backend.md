@@ -51,11 +51,19 @@ while counters cover every row; policy is `fail_fast` or `continue`.
 ## ImportProcessor
 
 ```go
-svc.RegisterImportProcessor(schemaID, mapper.ImportProcessorFunc(
-    func(ctx context.Context, info mapper.RowContext, record mapper.Record) error {
-        return repository.Save(ctx, record)
-    },
-))
+processor := mapper.ImportProcessorFunc(
+	func(ctx context.Context, info mapper.RowContext, record mapper.Record) error {
+		return repository.Save(ctx, record)
+	},
+)
+
+svc := mapper.New(
+	mapper.WithFileStore(store),
+	mapper.WithSourceAdapter(csv.New()),
+	mapper.WithImporter(executor.New(
+		executor.WithImportProcessor(processor),
+	)),
+)
 ```
 
 `Record.Values` follows target schema field order. Optional `BeginImport` /

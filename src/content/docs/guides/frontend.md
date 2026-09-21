@@ -32,21 +32,21 @@ bun run typecheck # tsc --noEmit
 Dependency order, enforced by workspace dependencies:
 
 ```text
-@mapper/client ─────────────────────────────┐
-  HTTP + protocol types. No workspace deps.  │
-@mapper/core                                 │ depends on client
-  Mapping ops, validation, workflow state.   │
-  No workspace deps.                         │
-@mapper/upload ─────────────────────────────┘
+@mapper-fe/client ─────────────────────────────┐
+  HTTP + protocol types. No workspace deps.     │
+@mapper-fe/core                                 │ depends on client
+  Mapping ops, validation, workflow state.      │
+  No workspace deps.                            │
+@mapper-fe/upload ─────────────────────────────┘
   UploadAdapter + multipart default.
-  Depends on @mapper/client.
-@mapper/react
+  Depends on @mapper-fe/client.
+@mapper-fe/react
   Editor, importer, React Flow adapter.
   Depends on client, core, upload. React ^19.
   Ships styles.css (CSS variables only).
 ```
 
-## `@mapper/client`
+## `@mapper-fe/client`
 
 Protocol types mirroring the backend wire format: `Schema`,
 `SchemaField`, `FieldType`, `FileMetadata`, `SourceRow`, `SheetAnalysis`,
@@ -72,7 +72,7 @@ Failures throw `MapperError` carrying `code`, `status`, and the raw `body`,
 parsed from the error envelope via `MapperError.fromResponse`. No React, no
 DOM.
 
-## `@mapper/core`
+## `@mapper-fe/core`
 
 Pure mapping logic with no framework code.
 
@@ -110,7 +110,7 @@ and `canTransition(status, event)`. `mapping_changed` and `reset` events
 apply from any status; state and events are generic over
 `MapperState<Schema, Analysis, Result>` so hosts keep their own types.
 
-## `@mapper/upload`
+## `@mapper-fe/upload`
 
 ```ts
 interface UploadAdapter {
@@ -119,10 +119,11 @@ interface UploadAdapter {
 ```
 
 `MultipartUploadAdapter` (or `createMultipartUploadAdapter`) implements it
-over `client.analyzeFile`. TUS resumable uploads arrive as a separate
-`@mapper/upload-tus` package behind the same interface.
+over `client.analyzeFile`. Resumable uploads live on the backend
+(`mapper-be/upload/tus`, mounted via `mapperhttp.WithUploadExtension`);
+there is no separate frontend upload package.
 
-## `@mapper/react`
+## `@mapper-fe/react`
 
 **`ReactFlowAdapter(spec, sourceColumns, targetFields)`** derives a
 React Flow graph from the spec: `source-{index}` / `target-{index}` nodes
@@ -152,7 +153,7 @@ resets the mapping to the new `file_id`; `MappingEditor` edits the spec;
 submit posts the validated mapping and reports `{ processed, succeeded,
 failed }` with bounded row errors. Multi-sheet files get a sheet selector
 that clears mappings on change. Styling is CSS variables only — import
-`@mapper/react/styles.css`, no Tailwind requirement.
+`@mapper-fe/react/styles.css`, no Tailwind requirement.
 
 The SDK stays thin: no CSV parsing, no mapping execution, no automatic
 matching. The backend revalidates everything and remains authoritative.

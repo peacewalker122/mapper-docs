@@ -29,13 +29,13 @@ model:
 Supported types: `string`, `integer`, `decimal`, `boolean`, `datetime`.
 Names must match `^[a-z][a-z0-9_]*$`.
 
-Generate the backend model:
+Generate the backend model and TypeScript schema. With `generators`
+configured in the YAML (see [Schema compiler](/mapper-docs/guides/compiler/)):
 
 ```bash
 mapper-gen generate \
   --input schema/subscriber.yaml \
-  --output generated/subscriber.gen.go \
-  --package generated
+  --lock schema/subscriber.lock.yaml
 ```
 
 Mapper creates:
@@ -52,18 +52,21 @@ The lock file preserves stable schema and field identities — commit it.
 In the backend:
 
 ```go
+processor := mapper.ImportProcessorFunc(
+	func(ctx context.Context, info mapper.RowContext, record mapper.Record) error {
+		return repository.Save(ctx, record)
+	},
+)
+
 svc := mapper.New(
 	mapper.WithFileStore(store),
+	mapper.WithSourceAdapter(csv.New()),
+	mapper.WithImporter(executor.New(
+		executor.WithImportProcessor(processor),
+	)),
 )
 
-svc.RegisterSchema(
-	generated.SubscriberSchema,
-)
-
-svc.RegisterImportProcessor(
-	generated.SubscriberSchema.ID,
-	processor,
-)
+_ = svc.RegisterSchema(generated.SubscriberSchema)
 ```
 
 Expose the HTTP adapter:
@@ -82,7 +85,7 @@ The backend now provides the core Mapper APIs:
 ```text
 GET  /schemas/{id}
 POST /files/analyze
-POST /imports
+POST /imports/sync
 ```
 
 ## Step 3: Add the Frontend SDK

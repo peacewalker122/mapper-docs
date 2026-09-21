@@ -1,10 +1,11 @@
 ---
 title: Install the compiler
-description: Install mapper-gen and mapper-gen-go via install script, release archive, or source build
+description: Install mapper-gen, mapper-gen-go, and mapper-gen-ts via install script, release archive, or source build
 ---
 
-One binary is not enough: you need both `mapper-gen` (orchestrator) and
-`mapper-gen-go` (Go generator plugin) on `PATH`. The host resolves plugins
+One binary is not enough: you need `mapper-gen` (orchestrator),
+`mapper-gen-go` (Go generator plugin), and `mapper-gen-ts` (TypeScript
+generator plugin) on `PATH`. The host resolves plugins
 via the `mapper-gen-<name>` executable convention.
 
 ## Install script (recommended)
@@ -17,7 +18,7 @@ curl -fsSL https://raw.githubusercontent.com/peacewalker122/mapper-compiler/main
 
 The script detects your OS/architecture, downloads the matching archive and
 checksums from GitHub Releases, verifies the SHA-256 checksum, and installs
-both binaries (defaults to `/usr/local/bin` when writable, otherwise
+all three binaries (defaults to `/usr/local/bin` when writable, otherwise
 `~/.local/bin`).
 
 Pin the version and/or install directory:
@@ -43,12 +44,12 @@ sh install.sh --version v0.1.0 --dir ~/.local/bin
    filename carries the version *without* the leading `v`.
 2. Verify against the published `mapper-compiler_<version>_checksums.txt`
    (SHA-256).
-3. Extract both binaries and put them on `PATH`:
+3. Extract all three binaries and put them on `PATH`:
 
 ```bash
 tar -xzf mapper-compiler_0.1.0_linux_amd64.tar.gz
-chmod +x mapper-gen mapper-gen-go
-sudo mv mapper-gen mapper-gen-go /usr/local/bin/
+chmod +x mapper-gen mapper-gen-go mapper-gen-ts
+sudo mv mapper-gen mapper-gen-go mapper-gen-ts /usr/local/bin/
 ```
 
 Replace `0.1.0` with the latest release version.
@@ -62,7 +63,8 @@ git clone https://github.com/peacewalker122/mapper-compiler.git
 cd mapper-compiler
 go build -o mapper-gen ./cmd/mapper-gen
 go build -o mapper-gen-go ./generator/go/cmd/mapper-gen-go
-# Move both binaries somewhere on PATH
+go build -o mapper-gen-ts ./generator/ts/cmd/mapper-gen-ts
+# Move all three binaries somewhere on PATH
 ```
 
 Compiler releases are binary-only; there is no installable Go module for

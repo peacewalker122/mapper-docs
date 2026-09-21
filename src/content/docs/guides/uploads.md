@@ -13,7 +13,13 @@ in one round trip. No separate adapter needed.
 
 ## TUS resumable uploads
 
-Mounted at `/uploads/tus/*` via `mapperhttp.WithUploadExtension(tus.New(store))`.
+Mounted at `/uploads/tus/*` via `mapperhttp.WithUploadExtension`:
+
+```go
+tusHandler := tus.New(tus.WithFileWriter(store))
+handler := mapperhttp.New(svc, store, tusHandler)
+```
+
 TUS 1.0.0 core over plain `net/http`, no extra dependencies:
 
 - `POST` creation with `Upload-Length` and `Upload-Metadata`
