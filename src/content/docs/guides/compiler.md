@@ -1,11 +1,11 @@
 ---
 title: Schema compiler
-description: YAML models to stable-identity schemas and language generators
+description: YAML models to stable-identity Go schemas
 ---
 
 `mapper-compiler` is a build-time tool. It reads a model, validates it,
 resolves stable numeric IDs through a lock file, then passes one resolved
-intermediate representation to configured language generators.
+intermediate representation to the Go generator.
 
 ```text
 mapper.yaml
@@ -51,14 +51,13 @@ generators:
     out: ./internal/mapper
     options:
       package: mapping
-
-  - plugin: typescript
-    out: ./src/mapper
 ```
 
-`mapper-gen` resolves plugin names through its registry and executable
-convention. Generator options are opaque to compiler core and validated by
-each plugin.
+`mapper-gen` resolves the Go plugin through its registry and executable
+convention. Generator options are validated by the Go plugin.
+
+Go is currently supported. Contributors are needed for additional language
+generators.
 
 ## Generator protocol
 
@@ -108,4 +107,4 @@ type CompileResult struct {
 }
 ```
 
-Language generation happens separately through `mapper-compiler/generator`.
+Go generation happens separately through `mapper-compiler/generator/go`.
