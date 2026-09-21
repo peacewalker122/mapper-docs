@@ -60,6 +60,49 @@ Row error codes: `invalid_integer`, `invalid_decimal`, `invalid_boolean`,
 `invalid_mapping`, `duplicate_target`, `unknown_target`,
 `required_target_missing`, `invalid_source_index`.
 
+## `POST /mappings/suggest`
+
+Suggests source-to-target field mappings for a stored schema without
+changing schemas or import state. Request and response payloads use
+`snake_case` (unlike legacy `GET /schemas/{id}`, which returns Go field
+names in PascalCase: `ID`, `Name`, `Fields`).
+
+Request:
+
+```json
+{
+  "schema_id": 732918273981273,
+  "columns": ["PhoneNumber", "Status"],
+  "options": { "min_confidence": 0.5, "limit": 10 }
+}
+```
+
+`schema_id` (positive integer) and `columns` (at least one non-empty
+name) are required. Optional `samples` carries sampled source values and
+optional `options` filters by `min_confidence` / `limit`.
+
+Success response (`200`):
+
+```json
+{
+  "suggestions": [
+    { "source": 0, "target": 8374629102847361, "confidence": 0.92, "reason": "fuzzy name match" }
+  ],
+  "model": "fuzzy"
+}
+```
+
+Status codes: `200` suggestions produced · `400` invalid `schema_id` /
+`columns` / malformed JSON · `404` schema missing · `503` suggester or
+service unavailable · `502` upstream suggestion service failed.
+`405` (`method_not_allowed`, only `POST` accepted) and `415`
+(`unsupported_media_type`, `application/json` required) also apply.
+
+Error codes: `invalid_schema_id`, `schema_not_found`, `invalid_columns`,
+`suggester_unavailable`, `upstream_error`, plus handler-emitted generics
+`invalid_request`, `method_not_allowed`, `unsupported_media_type`,
+`not_found`, `service_unavailable`.
+
 ## Errors
 
 ```json
