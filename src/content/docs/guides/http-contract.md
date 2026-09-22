@@ -103,6 +103,46 @@ Error codes: `invalid_schema_id`, `schema_not_found`, `invalid_columns`,
 `invalid_request`, `method_not_allowed`, `unsupported_media_type`,
 `not_found`, `service_unavailable`.
 
+## Jev-backed suggestions
+
+Use the server-side Jev provider when fuzzy name matching is not enough. Keep
+the API key on the backend; the frontend only calls `/mappings/suggest`.
+
+```go
+handler, err := mapperhttp.NewWithConfig(
+    svc,
+    mapperhttp.Config{
+        Suggester: mapperhttp.SuggesterConfig{
+            Provider: "jev",
+            APIKey:   os.Getenv("JEV_API_KEY"),
+        },
+    },
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+`Provider: "jev"` requires a non-empty `APIKey`. The adapter sends that key as
+`Authorization: Bearer ...` to Jev; it never puts the key in the request body.
+
+Optional `SuggesterConfig` fields:
+
+- `Endpoint`: custom Jev endpoint. Default:
+  `https://www.jevai.org/api/v1/decisions`.
+- `Timeout`: upstream request timeout. Default: 5 seconds.
+- `Model`: model name forwarded in the Jev request.
+
+If Jev times out, fails, or returns an unusable response, Mapper falls back to
+fuzzy matching for that suggestion request. The response `model` is `"jev"` on
+success and `"fuzzy"` after fallback.
+
+Set the key before starting the backend:
+
+```bash
+export JEV_API_KEY=your-jev-api-key
+```
+
 ## Errors
 
 ```json
